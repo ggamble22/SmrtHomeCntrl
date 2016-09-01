@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">SmrtHomeCntrl</string>
+    <string name="ip">192.168.0.157</string>
+    <string name="send_command">Send Command</string>
+    <string name="ip_addr">IP Addr:</string>
+    <string name="getdevicesettings">GetDeviceSettings</string>
+    <string name="command">Command:</string>
+    <string name="login">Login</string>
+</resources>
