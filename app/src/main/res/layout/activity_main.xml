@@ -9,75 +9,14 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="com.theggambler.smrthomecntrl.MainActivity">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/send_command"
-        android:id="@+id/sendBtn"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="43dp" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/login"
-        android:id="@+id/loginBtn"
-        android:layout_alignParentBottom="true"
-        android:layout_toEndOf="@+id/sendBtn" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/ipEditText"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/ipTextView"
-        android:layout_alignBaseline="@+id/ipTextView"
-        android:text="@string/ip"
-        android:singleLine="true"
-        android:inputType="text" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/ip_addr"
-        android:id="@+id/ipTextView"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:textSize="16sp" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/cmdEditText"
-        android:text="/var/sbin/relay 1"
-        android:singleLine="true"
-        android:inputType="text"
-        android:layout_alignBaseline="@+id/cmdTextView"
-        android:layout_toEndOf="@+id/cmdTextView"
-        android:layout_alignParentEnd="true" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/command"
-        android:id="@+id/cmdTextView"
-        android:textSize="16sp"
-        android:layout_below="@+id/ipEditText"
-        android:layout_alignParentStart="true"
-        android:layout_marginTop="30dp" />
-
-
-
     <ScrollView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/scrollView"
-        android:layout_below="@+id/cmdEditText"
         android:layout_alignParentStart="true"
-        android:layout_above="@+id/sendBtn"
-        android:layout_alignParentEnd="true">
+        android:layout_above="@+id/onBtn"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true">
 
         <TextView
             android:layout_width="fill_parent"
@@ -86,5 +25,31 @@
             android:id="@+id/responseTextView"
              />
     </ScrollView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OFF"
+        android:id="@+id/offBtn"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="INFO"
+        android:id="@+id/infoBtn"
+        android:layout_alignParentBottom="true"
+        android:layout_toEndOf="@+id/offBtn"
+        android:layout_marginStart="15dp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ON"
+        android:id="@+id/onBtn"
+        android:layout_alignParentBottom="true"
+        android:layout_toStartOf="@+id/offBtn"
+        android:layout_marginEnd="15dp" />
 
 </RelativeLayout>

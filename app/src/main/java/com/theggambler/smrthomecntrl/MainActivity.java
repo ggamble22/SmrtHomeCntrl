@@ -1,76 +1,98 @@
 package com.theggambler.smrthomecntrl;
 
+import android.app.Activity;
+import android.app.PendingIntent;
 import android.content.Intent;
+import android.nfc.NfcAdapter;
 import android.os.Bundle;
-import android.os.StrictMode;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import org.ksoap2.SoapEnvelope;
-import org.ksoap2.serialization.PropertyInfo;
-import org.ksoap2.serialization.SoapObject;
-import org.ksoap2.serialization.SoapSerializationEnvelope;
-import org.ksoap2.transport.HttpTransportSE;
+import com.theggambler.smrthomecntrl.hass.HassDriver;
+import com.theggambler.smrthomecntrl.mqtt.MqttDriver;
 
-public class MainActivity extends AppCompatActivity {
-    private static final String TAG = "HNAP Tester";
-    private Button sendBtn;
-    private Button loginBtn;
+
+public class MainActivity extends Activity {
+    public static final String TAG = "HNAP Tester";
+
+    private Button onBtn;
+    private Button offBtn;
+    private Button infoBtn;
     private TextView responseTextView;
-    private EditText ipEditText;
-    private EditText cmdEditText;
-    HttpTransportSE httpTransport;
-    SoapSerializationEnvelope envelope;
-    SoapObject request;
 
-    Intent intent = null;
+    private MqttDriver mMqttDriver;
+    private NfcDriver mNfcDriver;
+    private HassDriver hassDriver;
+
+    PendingIntent pendingIntent;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        /*StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);*/
-        System.setProperty("http.keepAlive", "false");
-
         setContentView(R.layout.activity_main);
-        responseTextView = (TextView)findViewById(R.id.responseTextView);
-        sendBtn = (Button)findViewById(R.id.sendBtn);
-        loginBtn = (Button)findViewById(R.id.loginBtn);
-        ipEditText = (EditText)findViewById(R.id.ipEditText);
-        cmdEditText = (EditText)findViewById(R.id.cmdEditText);
+        responseTextView = (TextView) findViewById(R.id.responseTextView);
+        onBtn = (Button) findViewById(R.id.onBtn);
+        offBtn = (Button) findViewById(R.id.offBtn);
+        infoBtn = (Button) findViewById(R.id.infoBtn);
 
-        sendBtn.setOnClickListener(new View.OnClickListener() {
+        onBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sendCmdOn();
             }
         });
-
-        loginBtn.setOnClickListener(new View.OnClickListener() {
+        offBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sendCmdOff();
             }
         });
 
-        intent = new Intent(this, W215CntrlService.class);
+        infoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                sendGetCmd();
+            }
+        });
+
+        pendingIntent = PendingIntent.getActivity(
+                this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
+
+        mNfcDriver = new NfcDriver(this.getApplicationContext(), pendingIntent);
+        hassDriver = new HassDriver(this.getApplicationContext());
     }
 
-    public void sendCmdOn()
-    {
-        intent.putExtra(W215CntrlService.W215_URL, "192.168.0.157");
-        intent.putExtra(W215CntrlService.W215_CMD, W215CntrlService.W215_CMD_ON);
-        startService(intent);
+    public void sendCmdOn() {
+        //mMqttDriver.sendBedroom();
+        hassDriver.turnOnLight();
     }
 
-    public void sendCmdOff()
-    {
-        intent.putExtra(W215CntrlService.W215_URL, "192.168.0.157");
-        intent.putExtra(W215CntrlService.W215_CMD, W215CntrlService.W215_CMD_OFF);
-        startService(intent);
+    public void sendCmdOff() {
+        hassDriver.turnOffLight();
     }
+
+    public void sendGetCmd() {
+        hassDriver.getLightState();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mNfcDriver.onPause(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mNfcDriver.onResume(this);
+    }
+
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        mNfcDriver.receiveData(this, intent.getParcelableExtra(NfcAdapter.EXTRA_TAG));
+    }
+
 }
