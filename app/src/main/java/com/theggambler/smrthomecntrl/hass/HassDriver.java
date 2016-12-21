@@ -1,7 +1,10 @@
 package com.theggambler.smrthomecntrl.hass;
 
+import android.app.Service;
 import android.content.Context;
+import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.IBinder;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -19,7 +22,7 @@ import java.util.concurrent.TimeoutException;
  * Created by Gene on 11/10/2016.
  */
 
-public class HassDriver implements Response.Listener<Node>, Response.ErrorListener {
+public class HassDriver extends Service implements Response.Listener<Node>, Response.ErrorListener {
     private static String TAG = "HASS_LIB";
     private static String USER = "ggamble22";
     private static String PASS = /*"12345"; //*/"Gag032290";//*/
@@ -116,5 +119,10 @@ public class HassDriver implements Response.Listener<Node>, Response.ErrorListen
     @Override
     public void onResponse(Node response) {
 
+    }
+
+    @Override
+    public IBinder onBind(Intent intent) {
+        return null;
     }
 }
